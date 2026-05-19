@@ -27,6 +27,10 @@ def penalty_func_G(x, y, alpha=2):
         return restrict ** alpha
     else:
         return 0
+    
+def barier_func_G(x, y, alpha=2):
+    restrict = restriction_g(x, y)
+    return (0.5 * restrict + abs(restrict)) ** alpha
 
 def penalty_functions_method(x0, y0, r0, penalty_func, alpha=2, beta=2, eps=1e-7):
     coords_prev = np.zeros(2)
@@ -63,10 +67,21 @@ def penalty_functions_method(x0, y0, r0, penalty_func, alpha=2, beta=2, eps=1e-7
     reset_counter()
     return coords_next
 
+def test1():
+    x = -2.
+    y = 3.
+    r = 2.
+    pf = barier_func_G
+    penalty_functions_method(x,y,r,pf,2)
+    penalty_functions_method(x,y,r,pf,4)
+    penalty_functions_method(x,y,r,pf,6)
+    penalty_functions_method(x,y,r,pf,8)
+    penalty_functions_method(x,y,r,pf,10)
+
 def test2():
     x = -2.
     y = 3.
-    pf = penalty_func_G
+    pf = barier_func_G
     penalty_functions_method(x,y,2.,pf)
     penalty_functions_method(x,y,5.,pf)
     penalty_functions_method(x,y,10.,pf)
@@ -77,7 +92,7 @@ def test3():
     x = -2.
     y = 3.
     r = 2.
-    pf = penalty_func_H
+    pf = barier_func_G
     penalty_functions_method(x,y,r,pf,2,2)
     penalty_functions_method(x,y,r,pf,2,4)
     penalty_functions_method(x,y,r,pf,2,6)
@@ -86,7 +101,7 @@ def test3():
 
 def test4():
     r = 2.
-    pf = penalty_func_G
+    pf = barier_func_G
     penalty_functions_method(-4.,2.,r,pf,2)
     penalty_functions_method(2.,-5.,r,pf,2)
     penalty_functions_method(-8.,3.,r,pf,2)
@@ -104,7 +119,7 @@ def test5():
     penalty_functions_method(x,y,r,pf,2.,2.,1e-09)
 
 def main():
-    test5()
+    test1()
 
 if __name__ == "__main__":
     main()
